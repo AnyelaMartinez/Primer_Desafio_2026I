@@ -1,10 +1,89 @@
 #include <iostream>
 
 using namespace std;
+unsigned int* crearTablero(int alto);
+void imprimirTablero(unsigned int* tablero, int alto, int ancho);
 
 int main()
 {
-    cout<<"Aqui va el main";
+    int ancho, alto;
+
+    cout<<"VAMOS A JUGAR TETRIS!"<<endl;
+    cout<<"Intrucciones del juego: "<<endl;
+    cout<<"1.Debes elegir las dimensiones del alto y ancho del tablero de tetris"<<endl;
+    cout<<"2."<<endl;
+    cout<<"RESTRICCIONES"<<endl;
+    cout<<"El ancho debe ser un multiplo de 8, siendo 8 el numero minimo y 32 el numero maximo."<<endl;
+    cout<<"El alto debe ser minimo 8, No hay un limite en altura, pero ten en cuenta que no tiene sentido jugar un tetris tan alto."<<endl;
+    cout<<"Ancho:"<<endl;
+    cin>>ancho;
+    cout<<"Alto: "<<endl;
+    cin>>alto;
+
+    //Validación del ancho
+    if(ancho < 8 || ancho > 32 || ancho % 8 != 0)
+    {
+        cout << "El ancho debe ser multiplo de 8, entre 8 y 32" << endl;
+        return 0;
+    }
+
+    unsigned int* tablero = crearTablero(alto);
+    imprimirTablero(tablero, alto, ancho);
+
+
+    delete[] tablero;
     return 0;
-    //ejecutar el juego con todas las funciones, creo que lo completaria al final
 }
+
+
+unsigned int* crearTablero(int alto){
+
+    unsigned int* tablero = new unsigned int[alto];
+
+    for(int i = 0; i < alto; i++)
+    {
+        tablero[i] = 0;
+    }
+
+    return tablero;
+};
+
+void imprimirTablero(unsigned int* tablero, int alto, int ancho)
+{
+    for(int i = 0; i < alto; i++)
+    {
+        for(int j = ancho - 1; j >= 0; j--)
+        {
+            if(tablero[i] & (1 << j))
+                cout << "#";
+            else
+                cout << ".";
+        }
+
+        cout << endl;
+    }
+}
+
+void generarFichas() {
+    //Se generan las fichas aleatoriamente
+};
+
+void rotar_Fichas() {
+    //Rotar a la derecha o izquierda las fichas
+};
+
+void mover_Derecha() {
+    //Mover bits a la derecha (aun no sé si en la misma función mover a izq y a der o hacerlas separadas)
+};
+
+void mover_Izquierda() {
+    //Mover bits a la izquierda
+};
+
+void verificar_Colisione() {
+    //Verificar si la ficha se choca con algo para parar o seguir bajando
+};
+
+void eliminar_Filas() {
+    //Eliminar las filas que esten completas con 1
+};
