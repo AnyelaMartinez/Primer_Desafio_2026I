@@ -1,4 +1,7 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
+
 
 using namespace std;
 unsigned int* crearTablero(int alto);
@@ -20,7 +23,7 @@ int main()
     cout<<"Alto: "<<endl;
     cin>>alto;
 
-    //Validación del ancho
+    //Validación del ancho (antes de iniciar cualquier funcion)
     if(ancho < 8 || ancho > 32 || ancho % 8 != 0)
     {
         cout << "El ancho debe ser multiplo de 8, entre 8 y 32" << endl;
@@ -65,7 +68,38 @@ void imprimirTablero(unsigned int* tablero, int alto, int ancho)
 }
 
 void generarFichas() {
-    //Se generan las fichas aleatoriamente
+    unsigned int ficha[4]; //maximo de filas que usaría una ficha
+
+    srand(time(0));
+    int tipo = (rand() % 5) + 1;
+
+    switch(tipo)
+    {
+    case 1: // I
+        ficha[0] = 15;
+        break;
+
+    case 2: // O
+        ficha[0] = 3;
+        ficha[1] = 3;
+        break;
+
+    case 3: // T
+        ficha[0] = 7;
+        ficha[1] = 2;
+        break;
+
+    case 4: // L
+        ficha[0] = 2;
+        ficha[1] = 2;
+        ficha[2] = 3;
+        break;
+
+    case 5: // Z
+        ficha[0] = 6;
+        ficha[1] = 3;
+        break;
+    }
 };
 
 void rotar_Fichas() {
