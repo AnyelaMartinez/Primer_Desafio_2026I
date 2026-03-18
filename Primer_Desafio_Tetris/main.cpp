@@ -6,6 +6,10 @@
 using namespace std;
 unsigned int* crearTablero(int alto);
 void imprimirTablero(unsigned int* tablero, int alto, int ancho);
+void generarFichas();
+void mostrarFicha(unsigned int* tablero, int alto, int ancho,
+                  unsigned int ficha[], int altoFicha,
+                  int x, int y);
 
 int main()
 {
@@ -33,6 +37,11 @@ int main()
     unsigned int* tablero = crearTablero(alto);
     imprimirTablero(tablero, alto, ancho);
 
+
+    //PRUEBA DE MOSTRAR FICHA
+    unsigned int ficha[4] = {7, 2};
+
+    mostrarFicha(tablero, alto, ancho, ficha, 2, 3, 0);
 
     delete[] tablero;
     return 0;
@@ -101,6 +110,46 @@ void generarFichas() {
         break;
     }
 };
+
+void mostrarFicha(unsigned int* tablero, int alto, int ancho,
+                  unsigned int ficha[], int altoFicha,
+                  int x, int y)
+{
+    for(int i = 0; i < alto; i++)
+    {
+        for(int j = ancho - 1; j >= 0; j--)
+        {
+            if(tablero[i] & (1 << j))
+            {
+                cout << "#";
+            }
+            else
+            {
+
+                if(i >= y && i < y + altoFicha)
+                {
+                    int filaFicha = i - y;
+
+                    unsigned int filaMovida = ficha[filaFicha] << x;
+
+                    if(filaMovida & (1 << j))
+                    {
+                        cout << "@";
+                    }
+                    else
+                    {
+                        cout << ".";
+                    }
+                }
+                else
+                {
+                    cout << ".";
+                }
+            }
+        }
+        cout << endl;
+    }
+}
 
 void rotar_Fichas() {
     //Rotar a la derecha o izquierda las fichas
