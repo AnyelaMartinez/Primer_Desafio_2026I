@@ -58,7 +58,7 @@ void mostrarFicha(unsigned int* tablero, int alto, int ancho,unsigned int ficha[
         {
             if(tablero[i] & (1u << j))
             {
-                cout << "#";
+                cout << " # ";
             }
             else
             {
@@ -71,16 +71,16 @@ void mostrarFicha(unsigned int* tablero, int alto, int ancho,unsigned int ficha[
 
                     if(filaMovida & (1u << j))
                     {
-                        cout << "@";
+                        cout << " @ ";
                     }
                     else
                     {
-                        cout << ".";
+                        cout << " . ";
                     }
                 }
                 else
                 {
-                    cout << ".";
+                    cout << " . ";
                 }
             }
         }

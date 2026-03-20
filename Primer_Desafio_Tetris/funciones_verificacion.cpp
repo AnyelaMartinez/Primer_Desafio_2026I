@@ -1,38 +1,65 @@
 #include "funciones_tetris.h"
 
 
-bool verificarColisiones(unsigned int* tablero,int alto,int ancho,unsigned int ficha[],int altoFicha, int anchoFicha, int &x, int y  ) {
-
-    //con los bordes del tablero
-
-    //borde derecho
+bool verificarColisiones(unsigned int* tablero,int alto,int ancho,unsigned int ficha[],int altoFicha,int anchoFicha, int &x, int y)
+{
+    // bordes
     if(x < 0)
         return true;
 
-    //borde izquierdo
-    if (x + anchoFicha > ancho)
+    if(x + anchoFicha > ancho)
         return true;
 
-    //Borde abajo
     if(y + altoFicha > alto)
         return true;
 
-    //Colisión con otras fichas
-    int desplazamiento1 = ancho - anchoFicha - x;
-
     for(int i = 0; i < altoFicha; i++)
     {
-        unsigned int filaMovida = ficha[i] << desplazamiento1;
-        if(filaMovida & tablero[y + i])
-            return true;
+        for(int j = 0; j < anchoFicha; j++)
+        {
+            if(ficha[i] & (1u << j))
+            {
+                int colTablero = x + j;
+
+                int bitReal = ancho - 1 - colTablero;
+
+                if(tablero[y + i] & (1u << bitReal))
+                {
+                    return true;
+                }
+            }
+        }
     }
 
     return false;
-
 }
 
 
+void eliminar_Filas(unsigned int* tablero, int alto, int ancho)
+{
+    for(int i = alto - 1; i >= 0; i--)
+    {
+        bool llena = true;
 
-void eliminar_Filas() {
-    //Eliminar las filas que esten completas con 1
+        for(int j = 0; j < ancho; j++)
+        {
+            if(!(tablero[i] & (1u << j)))
+            {
+                llena = false;
+                break;
+            }
+        }
+
+        if(llena)
+        {
+            for(int k = i; k > 0; k--)
+            {
+                tablero[k] = tablero[k - 1];
+            }
+
+            tablero[0] = 0;
+
+            i++;
+        }
+    }
 }

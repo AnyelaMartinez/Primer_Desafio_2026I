@@ -22,9 +22,9 @@ void imprimirTablero(unsigned int* tablero, int alto, int ancho)
         for(int j = ancho - 1; j >= 0; j--)
         {
             if(tablero[i] & (1u << j))
-                cout << "#";
+                cout << " # ";
             else
-                cout << ".";
+                cout << " . ";
         }
 
         cout << endl;
