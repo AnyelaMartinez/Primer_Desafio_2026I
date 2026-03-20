@@ -4,28 +4,30 @@
 
 
 using namespace std;
+
 unsigned int* crearTablero(int alto);
 void imprimirTablero(unsigned int* tablero, int alto, int ancho);
-void generarFichas();
+void generarFichas(unsigned int ficha[], int &altoFicha, int &anchoFicha);
 void mostrarFicha(unsigned int* tablero, int alto, int ancho,
-                  unsigned int ficha[], int altoFicha,
+                  unsigned int ficha[], int altoFicha,int anchoFicha,
                   int x, int y);
 
 int main()
 {
+    srand(time(0));
     int ancho, alto;
 
     cout<<"VAMOS A JUGAR TETRIS!"<<endl;
     cout<<"Intrucciones del juego: "<<endl;
-    cout<<"1.Debes elegir las dimensiones del alto y ancho del tablero de tetris"<<endl;
-    cout<<"2."<<endl;
-    cout<<"RESTRICCIONES"<<endl;
-    cout<<"El ancho debe ser un multiplo de 8, siendo 8 el numero minimo y 32 el numero maximo."<<endl;
-    cout<<"El alto debe ser minimo 8, No hay un limite en altura, pero ten en cuenta que no tiene sentido jugar un tetris tan alto."<<endl;
-    cout<<"Ancho:"<<endl;
-    cin>>ancho;
-    cout<<"Alto: "<<endl;
-    cin>>alto;
+    cout << "1. Elige las dimensiones del tablero" << endl;
+    cout << "RESTRICCIONES" << endl;
+    cout << "Ancho: multiplo de 8, minimo 8, maximo 32." << endl;
+    cout << "Alto: minimo 8." << endl;
+
+    cout << "Ancho: ";
+    cin >> ancho;
+    cout << "Alto: ";
+    cin >> alto;
 
     //Validación del ancho (antes de iniciar cualquier funcion)
     if(ancho < 8 || ancho > 32 || ancho % 8 != 0)
@@ -34,14 +36,26 @@ int main()
         return 0;
     }
 
+    //Tambien se debe validar el alto minimo
+    if(alto < 8)
+    {
+        cout << "El alto debe ser minimo 8"<<endl;
+        return 0;
+    }
+
     unsigned int* tablero = crearTablero(alto);
-    imprimirTablero(tablero, alto, ancho);
+
+    unsigned int ficha[4];
+    int altoFicha;
+    int anchoFicha;
 
 
-    //PRUEBA DE MOSTRAR FICHA
-    unsigned int ficha[4] = {7, 2};
+    generarFichas(ficha, altoFicha, anchoFicha);
 
-    mostrarFicha(tablero, alto, ancho, ficha, 2, 3, 0);
+    //Las fichas se deben mostrar centradas, entonces se calcula el centro
+
+    int xInicial = (ancho-anchoFicha)/2;
+    mostrarFicha(tablero, alto, ancho, ficha, altoFicha, anchoFicha, xInicial, 0);
 
     delete[] tablero;
     return 0;
@@ -66,7 +80,7 @@ void imprimirTablero(unsigned int* tablero, int alto, int ancho)
     {
         for(int j = ancho - 1; j >= 0; j--)
         {
-            if(tablero[i] & (1 << j))
+            if(tablero[i] & (1u << j))
                 cout << "#";
             else
                 cout << ".";
@@ -76,50 +90,58 @@ void imprimirTablero(unsigned int* tablero, int alto, int ancho)
     }
 }
 
-void generarFichas() {
-    unsigned int ficha[4]; //maximo de filas que usaría una ficha
-
-    srand(time(0));
-    int tipo = (rand() % 5) + 1;
+void generarFichas(unsigned int ficha[], int &altoFicha, int &anchoFicha)
+{
+    int tipo = rand() % 5 + 1;
 
     switch(tipo)
     {
     case 1: // I
         ficha[0] = 15;
+        altoFicha = 1;
+        anchoFicha = 4;
         break;
 
     case 2: // O
         ficha[0] = 3;
         ficha[1] = 3;
+        altoFicha = 2;
+        anchoFicha = 2;
         break;
 
     case 3: // T
         ficha[0] = 7;
         ficha[1] = 2;
+        altoFicha = 2;
+        anchoFicha = 3;
         break;
 
     case 4: // L
         ficha[0] = 2;
         ficha[1] = 2;
         ficha[2] = 3;
+        altoFicha = 3;
+        anchoFicha = 2;
         break;
 
     case 5: // Z
         ficha[0] = 6;
         ficha[1] = 3;
+        altoFicha = 2;
+        anchoFicha = 3;
         break;
     }
-};
+}
 
-void mostrarFicha(unsigned int* tablero, int alto, int ancho,
-                  unsigned int ficha[], int altoFicha,
-                  int x, int y)
+void mostrarFicha(unsigned int* tablero, int alto, int ancho,unsigned int ficha[], int altoFicha, int anchoFicha, int x, int y)
 {
+    int desplazamiento = ancho - anchoFicha - x;
+
     for(int i = 0; i < alto; i++)
     {
         for(int j = ancho - 1; j >= 0; j--)
         {
-            if(tablero[i] & (1 << j))
+            if(tablero[i] & (1u << j))
             {
                 cout << "#";
             }
@@ -130,9 +152,9 @@ void mostrarFicha(unsigned int* tablero, int alto, int ancho,
                 {
                     int filaFicha = i - y;
 
-                    unsigned int filaMovida = ficha[filaFicha] << x;
+                    unsigned int filaMovida = ficha[filaFicha] << desplazamiento;
 
-                    if(filaMovida & (1 << j))
+                    if(filaMovida & (1u << j))
                     {
                         cout << "@";
                     }
